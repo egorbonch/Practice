@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="MessengerService"
+  targetNamespace="http://localhost:3000/soap"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tns="http://localhost:3000/soap"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://localhost:3000/soap">
+			<xsd:element name="sendMessageRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="senderId"   type="xsd:string"/>
+						<xsd:element name="receiverId" type="xsd:string"/>
+						<xsd:element name="content"    type="xsd:string"/>
+						<xsd:element name="token"      type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sendMessageResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="messageId" type="xsd:string"/>
+						<xsd:element name="status"    type="xsd:string"/>
+						<xsd:element name="timestamp" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getHistoryRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userId"     type="xsd:string"/>
+						<xsd:element name="withUserId" type="xsd:string"/>
+						<xsd:element name="token"      type="xsd:string"/>
+						<xsd:element name="limit"      type="xsd:integer"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getHistoryResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="messages" type="xsd:string"/>
+						<xsd:element name="count"    type="xsd:integer"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</types>
+	<message name="sendIn">
+		<part name="parameters" element="tns:sendMessageRequest"/>
+	</message>
+	<message name="sendOut">
+		<part name="parameters" element="tns:sendMessageResponse"/>
+	</message>
+	<message name="histIn">
+		<part name="parameters" element="tns:getHistoryRequest"/>
+	</message>
+	<message name="histOut">
+		<part name="parameters" element="tns:getHistoryResponse"/>
+	</message>
+	<portType name="MessengerPort">
+		<operation name="sendMessage">
+			<input message="tns:sendIn"/>
+			<output message="tns:sendOut"/>
+		</operation>
+		<operation name="getHistory">
+			<input message="tns:histIn"/>
+			<output message="tns:histOut"/>
+		</operation>
+	</portType>
+	<binding name="MessengerBinding" type="tns:MessengerPort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="sendMessage">
+			<soap:operation soapAction="sendMessage"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="getHistory">
+			<soap:operation soapAction="getHistory"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="MessengerService">
+		<port name="MessengerPort" binding="tns:MessengerBinding">
+			<soap:address location="http://localhost:3000/soap"/>
+		</port>
+	</service>
+</definitions>
