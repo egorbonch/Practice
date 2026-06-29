@@ -5,6 +5,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { sequelize } = require('./config/db');
 
+require('./models/User');
+require('./models/Message');
+require('./models/Room');
+
 const app = express();
 const server = http.createServer(app);
 
